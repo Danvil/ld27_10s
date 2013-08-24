@@ -5,3 +5,4 @@ build
 Temp
 *.csproj
 *.sln
+*.sublime-workspace
