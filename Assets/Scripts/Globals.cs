@@ -11,7 +11,7 @@ public static class Globals
 	// public const float BRAVO_TIME = 1.5f;
 
 	public static int Level = 1;
-	public static int LastLevel = 4;
+	public static int LastLevel = 5;
 
 	public static Player Player;
 	public static Room Room;
