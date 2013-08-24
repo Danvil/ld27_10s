@@ -22,7 +22,7 @@ namespace EditorTools
 			{
 				Execute();
 			}
-			EditorGUILayout.LabelField("Parallel Rectangle RMSE: " + rmse);
+			// EditorGUILayout.LabelField("Parallel Rectangle RMSE: " + rmse);
 
 		}
 		

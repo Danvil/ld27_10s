@@ -3,8 +3,6 @@ using System.Collections;
 
 public class Announcer : MonoBehaviour {
 	
-	const float WARMUP_TIME = 0.5f; // 3.5f;
-
 	float dt;
 
 	void Awake() {
@@ -12,7 +10,7 @@ public class Announcer : MonoBehaviour {
 	}
 
 	void Start () {
-		dt = WARMUP_TIME;
+		dt = Globals.WARMUP_TIME;
 	}
 	
 	void Update () {
