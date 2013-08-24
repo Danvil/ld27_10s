@@ -6,6 +6,9 @@ public class PlayerIsGrounded : MonoBehaviour {
 	int cnt = 0;
 	bool last = false;
 
+	int vally = 0;
+	bool stayy = false;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -13,6 +16,8 @@ public class PlayerIsGrounded : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		last = stayy;// stayy || (vally > 0);
+		stayy = false;
 		if(Globals.Player.IsGrounded != last) {
 			cnt ++;
 			if(cnt >= 2) {
@@ -27,7 +32,7 @@ public class PlayerIsGrounded : MonoBehaviour {
 	void OnTriggerEnter(Collider other) {
 		if(other.gameObject != Globals.Player.gameObject) {
 				Debug.Log("OnTriggerEnter");
-			last = true;
+			vally ++;
 		}
 	}
 
@@ -35,14 +40,14 @@ public class PlayerIsGrounded : MonoBehaviour {
 		if(other.gameObject != Globals.Player.gameObject) {
 			Debug.Log(other);
 				Debug.Log("OnTriggerStay");
-			last = true;
+			stayy = true;
 		}
 	}
 
 	void OnTriggerExit(Collider other) {
 		if(other.gameObject != Globals.Player.gameObject) {
 				Debug.Log("OnTriggerExit");
-			last = false;
+			vally --;
 		}
 	}
 }
