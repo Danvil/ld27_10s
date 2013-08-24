@@ -3,17 +3,17 @@ using System.Collections;
 
 public class Clock : MonoBehaviour {
 	
-	public float Length = 1000.0f;
+	const float GAMETIME = 10.0f;
 
-	float timeGone = 0.0f;
+	float timeGone = GAMETIME;
 
 	public bool TimeOut {
-		get { return timeGone >= Length; }
+		get { return timeGone <= 0.0f; }
 	}
 
 	Color findColor() {
-		if(timeGone > 0.9f*Length) return Color.red;
-		else if(timeGone > 0.7f*Length) return Color.yellow;
+		if(timeGone < 0.1f*GAMETIME) return Color.red;
+		else if(timeGone < 0.3f*GAMETIME) return Color.yellow;
 		else return Color.white;
 	}
 	
@@ -27,8 +27,8 @@ public class Clock : MonoBehaviour {
 	
 	void Update () {
 		if(!MyTime.Pause) {
-			timeGone += MyTime.DeltaTime;
-			timeGone = Mathf.Min(Length, timeGone);
+			timeGone -= MyTime.DeltaTime;
+			timeGone = Mathf.Min(GAMETIME, timeGone);
 			guiText.material.color = findColor();
 		}
 		float q = 0.01f*Mathf.Round(100.0f*timeGone);

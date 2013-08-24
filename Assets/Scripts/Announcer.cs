@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Announcer : MonoBehaviour {
 	
+	const float WARMUP_TIME = 0.5f; // 3.5f;
+
 	float dt;
 
 	void Awake() {
@@ -10,12 +12,11 @@ public class Announcer : MonoBehaviour {
 	}
 
 	void Start () {
-		dt = 3.5f;
+		dt = WARMUP_TIME;
 	}
 	
 	void Update () {
 		if(!Globals.HasStarted) {
-			Debug.Log(Time.deltaTime);
 			dt -= Time.deltaTime;
 			if(dt <= 0.0f) {
 				dt = 0.0f;
@@ -40,14 +41,20 @@ public class Announcer : MonoBehaviour {
 			if(Globals.Clock.TimeOut) {
 				Globals.HasEnded = true;
 			}
+			if(Globals.ExitReached) {
+				Globals.HasEnded = true;
+			}
 		}
 		if(Globals.HasEnded) {
 			MyTime.Pause = true;
 			if(Globals.Player.IsDead) {
-				guiText.text = "You died ...";
+				guiText.text = "... (argh!) ...";
 			}
 			if(Globals.Clock.TimeOut) {
 				guiText.text = "Time over ...";
+			}
+			if(Globals.ExitReached) {
+				guiText.text = "Bravo!";
 			}
 		}
 	}

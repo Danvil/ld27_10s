@@ -8,12 +8,12 @@ public class Block : MonoBehaviour {
 
 	public Vector3 wobbleDirection;
 	
-	public Vector3 basePosition;
-
 	public Vector3 offset;
 
-	public float phaseOffset;
+	float phaseOffset;
 	
+	Vector3 basePosition;
+
 	public void SetRandomXZWobbleDirection() {
 		while(true) {
 			wobbleDirection = Random.insideUnitSphere;
@@ -31,6 +31,7 @@ public class Block : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		basePosition = this.transform.localPosition;
 		phaseOffset = Random.value;
 	}
 	
