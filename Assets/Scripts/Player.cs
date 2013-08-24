@@ -36,12 +36,12 @@ public class Player : MonoBehaviour {
 		float dtf = MyTime.DeltaTime;
 		// check if player is on ground
 		// IsGrounded = controller.isGrounded; // does not work reliably...
-		if(IsGrounded) {
-			this.GetComponentInChildren<Renderer>().material.color = Color.blue;
-		}
-		else {
-			this.GetComponentInChildren<Renderer>().material.color = Color.green;
-		}
+		// if(IsGrounded) {
+		// 	this.GetComponentInChildren<Renderer>().material.color = Color.blue;
+		// }
+		// else {
+		// 	this.GetComponentInChildren<Renderer>().material.color = Color.green;
+		// }
 		// move player
 		if(!MyTime.Pause) {
 			bool velocity_changed = false;
