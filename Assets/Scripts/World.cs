@@ -5,12 +5,18 @@ public class World : MonoBehaviour
 {
 	public GameObject blockBase;
 	
-	void AddBlock(float x, float y, float z)
+	Block AddBlock(float x, float y, float z)
 	{
  		GameObject go = (GameObject)Instantiate(blockBase);
  		Block block = go.GetComponent<Block>();
  		block.basePosition = new Vector3(x,y,z);
 		go.transform.parent = this.transform;
+		block.SetYWobbleDirection();
+		block.offset = new Vector3(
+			-0.05f + 0.1f*Random.value,
+			-0.05f + 0.1f*Random.value,
+			-0.05f + 0.1f*Random.value);
+		return block;
 	}
 	
 	void CreateAWorld()
@@ -22,7 +28,12 @@ public class World : MonoBehaviour
 		// floor
 		for(int x=0; x<W; x++) {
 			for(int z=0; z<D; z++) {
-				AddBlock(x, 0, z);
+				Block block = AddBlock(x, 0, z);
+				block.SetRandomXZWobbleDirection();
+				block.offset = new Vector3(
+					-0.05f + 0.1f*Random.value,
+					0.0f,
+					-0.05f + 0.1f*Random.value);
 		 	}
 		}
 		// back wall
@@ -50,6 +61,10 @@ public class World : MonoBehaviour
 					AddBlock(x, h, 0);
 			}
 		}
+	}
+
+	void Awake() {
+		Globals.World = this;
 	}
 
 	void Start () {

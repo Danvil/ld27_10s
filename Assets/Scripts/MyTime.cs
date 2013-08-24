@@ -11,20 +11,16 @@ static class MyTime
 		}
 		set {
 			pause = value;
-			Time.timeScale = pause ? 0.0f : 1.0f; // for whatever it's good ...
+			// Time.timeScale = pause ? 0.0f : 1.0f; // for whatever it's good ...
 		}
 	}
 
-	static public float deltaTime {
+	static public float DeltaTime {
 		get {
-			return Pause ? 0.0f : Time.deltaTime;
+			return Pause ? 0.0f : UnityEngine.Time.deltaTime;
 		}
 	}
 
-	static public float time {
-		get {
-			return Time.time;
-		}
-	}
+	static public float Time { get; set; }
 
 }
