@@ -2,7 +2,9 @@
 using System.Collections;
 
 public class Bars : MonoBehaviour {
-
+	
+	Trigger trigger;
+	
 	public bool IsLifted { get; private set; }
 
 	public void Lift()
@@ -12,14 +14,16 @@ public class Bars : MonoBehaviour {
 		}
 		this.transform.position += new Vector3(0.0f, 2.0f, 0.0f);
 	}
-
-	// Use this for initialization
-	void Start () {
+	
+	void Start() {
 		IsLifted = false;
+		trigger = GetComponent<Trigger>();
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	
+	void Update() {
+		if(trigger.IsTriggered) {
+			Lift();
+		}
 	}
 }

@@ -12,6 +12,7 @@ public class Bootstrap : MonoBehaviour {
 		((GameObject)Instantiate(pfAnnouncer)).transform.parent = this.transform;
 		((GameObject)Instantiate(pfClock)).transform.parent = this.transform;
 		((GameObject)Instantiate(pfCamera)).transform.parent = this.transform;
+		Globals.Level = GameObject.Find("Level").GetComponent<Level>();
 	}
 	
 	void Start () {

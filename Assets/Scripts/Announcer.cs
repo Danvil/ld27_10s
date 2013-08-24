@@ -65,7 +65,7 @@ public class Announcer : MonoBehaviour {
 					guiText.text = "Press JUMP to retry the level";
 					if(Input.GetButtonDown("Jump")) {
 						// repeat level
-						string lvl = string.Format("level_{0:000}", Globals.Level);
+						string lvl = string.Format("level_{0:000}", Globals.LevelID);
 						Globals.HasStarted = false;
 						Globals.HasEnded = false;
 						Globals.ExitReached = false;
@@ -74,8 +74,8 @@ public class Announcer : MonoBehaviour {
 				}
 			}
 			else {
-				if(Globals.Level == Globals.LastLevel) {
-					guiText.text = "Yeah!\nYou completed all " + Globals.Level.ToString() + " levels!";
+				if(Globals.LevelID == Globals.LastLevelID) {
+					guiText.text = "Yeah!\nYou completed all " + Globals.LevelID.ToString() + " levels!";
 				}
 				else {
 					dt -= Time.deltaTime;
@@ -89,8 +89,8 @@ public class Announcer : MonoBehaviour {
 						guiText.text = "Press JUMP for next level";
 						if(Input.GetButtonDown("Jump")) {
 							// next level
-							Globals.Level ++;
-							string lvl = string.Format("level_{0:000}", Globals.Level);
+							Globals.LevelID ++;
+							string lvl = string.Format("level_{0:000}", Globals.LevelID);
 							Globals.HasStarted = false;
 							Globals.HasEnded = false;
 							Globals.ExitReached = false;
