@@ -13,8 +13,6 @@ namespace EditorTools
 			EditorWindow.GetWindow(typeof(RoomGenerator));
 		}
 		
-		float rmse = 0.0f;
-		
 		void OnGUI()
 		{
 			EditorGUIUtility.LookLikeInspector();

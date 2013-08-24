@@ -32,6 +32,7 @@ public class Player : MonoBehaviour {
 	}
 	
 	void Update () {
+		// float dtf = 0.02f;
 		float dtf = MyTime.DeltaTime;
 		// check if player is on ground
 		// IsGrounded = controller.isGrounded; // does not work reliably...
@@ -61,7 +62,7 @@ public class Player : MonoBehaviour {
 				movedir += new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 				float len = movedir.magnitude;
 				if(len > 0.0f) {
-					velocity += accelerationMove * movedir / len;
+					velocity += accelerationMove * movedir / len * dtf;
 					velocity_changed = true;
 				}
 			}
@@ -70,13 +71,13 @@ public class Player : MonoBehaviour {
 				Vector3 v = velocity;
 				v.y = 0.0f;
 				Vector3 breakForce = (breakLin * v + breakQuad * v.magnitude * v) * dtf;
-				if(velocity.x < breakForce.x) {
+				if(Mathf.Abs(velocity.x) < Mathf.Abs(breakForce.x)) {
 					velocity.x = 0.0f;
 				}
 				else {
 					velocity.x -= breakForce.x;
 				}
-				if(velocity.z < breakForce.z) {
+				if(Mathf.Abs(velocity.z) < Mathf.Abs(breakForce.z)) {
 					velocity.z = 0.0f;
 				}
 				else {

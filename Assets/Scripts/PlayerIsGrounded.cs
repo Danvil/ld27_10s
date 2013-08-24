@@ -15,7 +15,7 @@ public class PlayerIsGrounded : MonoBehaviour {
 	void Update () {
 		if(Globals.Player.IsGrounded != last) {
 			cnt ++;
-			if(cnt == 2) {
+			if(cnt >= 2) {
 				Globals.Player.IsGrounded = last;
 			}
 		}
@@ -26,20 +26,22 @@ public class PlayerIsGrounded : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other) {
 		if(other.gameObject != Globals.Player.gameObject) {
-				// Debug.Log("OnTriggerEnter");
+				Debug.Log("OnTriggerEnter");
 			last = true;
 		}
 	}
 
 	void OnTriggerStay(Collider other) {
 		if(other.gameObject != Globals.Player.gameObject) {
+			Debug.Log(other);
+				Debug.Log("OnTriggerStay");
 			last = true;
 		}
 	}
 
 	void OnTriggerExit(Collider other) {
 		if(other.gameObject != Globals.Player.gameObject) {
-				// Debug.Log("OnTriggerExit");
+				Debug.Log("OnTriggerExit");
 			last = false;
 		}
 	}
