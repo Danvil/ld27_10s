@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public class PressurePlate : MonoBehaviour {
 
+	public Material matPressed;
+
 	public List<Trigger> triggers = new List<Trigger>();
 
 	void Start() { }
@@ -13,6 +15,7 @@ public class PressurePlate : MonoBehaviour {
 		foreach(Trigger x in triggers) {
 			x.OnTrigger();
 		}
+		this.GetComponentInChildren<Renderer>().material = matPressed;
 	}
 
 }

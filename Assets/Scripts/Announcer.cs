@@ -12,6 +12,15 @@ public class Announcer : MonoBehaviour {
 	void Start () {
 		announceTime = Globals.WARMUP_TIME;
 	}
+
+	void LoadLevel(int i) {
+		Globals.LevelID = i;
+		string lvl = string.Format("level_{0:000}", Globals.LevelID);
+		Globals.HasStarted = false;
+		Globals.HasEnded = false;
+		Globals.ExitReached = false;
+		Application.LoadLevel(lvl); 
+	}
 	
 	void Update () {
 		MyTime.UpdateRealDeltaTime();
@@ -64,14 +73,10 @@ public class Announcer : MonoBehaviour {
 					}
 				}
 				else {
-					guiText.text = "Press JUMP to retry the level";
+					guiText.text = "Press (jump) to retry the level";
 					if(Input.GetButtonDown("Jump")) {
 						// repeat level
-						string lvl = string.Format("level_{0:000}", Globals.LevelID);
-						Globals.HasStarted = false;
-						Globals.HasEnded = false;
-						Globals.ExitReached = false;
-						Application.LoadLevel(lvl); 
+						LoadLevel(Globals.LevelID); 
 					}
 				}
 			}
@@ -88,15 +93,10 @@ public class Announcer : MonoBehaviour {
 						}
 					}
 					else {
-						guiText.text = "Press JUMP for next level";
+						guiText.text = "Press (jump) for next level";
 						if(Input.GetButtonDown("Jump")) {
 							// next level
-							Globals.LevelID ++;
-							string lvl = string.Format("level_{0:000}", Globals.LevelID);
-							Globals.HasStarted = false;
-							Globals.HasEnded = false;
-							Globals.ExitReached = false;
-							Application.LoadLevel(lvl); 
+							LoadLevel(Globals.LevelID + 1);
 						}
 					}
 				}

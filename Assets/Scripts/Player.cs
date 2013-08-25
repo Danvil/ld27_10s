@@ -28,6 +28,10 @@ public class Player : MonoBehaviour
 	string currentAnim = "Idle";
 
 	public bool IsDead { get; private set; }
+	
+	public void Die() {
+		IsDead = true;
+	}
 
 	void Awake() {
 		Globals.Player = this;
@@ -47,16 +51,16 @@ public class Player : MonoBehaviour
 		float dtf = MyTime.DeltaTime;
 		// check if player is on ground
 		// IsGrounded = controller.isGrounded; // does not work reliably...
-		Color col;
-		if(IsGrounded) {
-			col = Color.blue;
-		}
-		else {
-			col = Color.green;
-		}
-		foreach(var r in this.GetComponentsInChildren<Renderer>()) {
-			r.material.color = col;
-		}
+		// Color col;
+		// if(IsGrounded) {
+		// 	col = Color.blue;
+		// }
+		// else {
+		// 	col = Color.green;
+		// }
+		// foreach(var r in this.GetComponentsInChildren<Renderer>()) {
+		// 	r.material.color = col;
+		// }
 		// move player
 		if(!MyTime.Pause) {
 			// jump accelerate

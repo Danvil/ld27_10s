@@ -1,7 +1,7 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
-public class Block : MonoBehaviour {
+public class Wobble : MonoBehaviour {
 
 	public bool isGround = false;
 	
