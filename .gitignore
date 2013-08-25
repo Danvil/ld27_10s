@@ -6,3 +6,7 @@ Temp
 *.csproj
 *.sln
 *.sublime-workspace
+*.blend1
+*.blend1.meta
+*.blend2
+*.blend2.meta

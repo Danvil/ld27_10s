@@ -3,54 +3,56 @@ using System.Collections;
 
 public class Announcer : MonoBehaviour {
 	
-	float dt;
+	float announceTime;
 
 	void Awake() {
 		MyTime.Pause = true;
 	}
 
 	void Start () {
-		dt = Globals.WARMUP_TIME;
+		announceTime = Globals.WARMUP_TIME;
 	}
 	
 	void Update () {
+		MyTime.UpdateRealDeltaTime();
+		float dt = MyTime.RealDeltaTime;
 		if(!Globals.HasStarted) {
-			dt -= Time.deltaTime;
-			if(dt <= 0.0f) {
-				dt = 0.0f;
+			announceTime -= dt;
+			if(announceTime <= 0.0f) {
+				announceTime = 0.0f;
 				guiText.text = "";
 				Globals.HasStarted = true;
 				MyTime.Pause = false;
 			}
-			else if(dt <= 0.5f) {
+			else if(announceTime <= 0.5f) {
 				guiText.text = "GO!";
 			}
 			else {
-				guiText.text = string.Format("Get ready {0:0}...", dt);
+				guiText.text = string.Format("Get ready {0:0}...", announceTime);
 			}
 		}
 		if(Globals.HasStarted && !Globals.HasEnded) {
 			if(!MyTime.Pause) {
-				MyTime.Time += Time.deltaTime;
+				MyTime.GameTime += dt;
 			}
 			if(Globals.Player.IsDead) {
 				Globals.HasEnded = true;
-				dt = Globals.BRAVO_TIME;
+				announceTime = Globals.BRAVO_TIME;
 			}
 			if(Globals.Clock.TimeOut) {
 				Globals.HasEnded = true;
-				dt = Globals.BRAVO_TIME;
+				announceTime = Globals.BRAVO_TIME;
 			}
 			if(Globals.ExitReached) {
 				Globals.HasEnded = true;
-				dt = Globals.BRAVO_TIME;
+				announceTime = Globals.BRAVO_TIME;
 			}
 		}
 		if(Globals.HasEnded) {
 			MyTime.Pause = true;
 			if(!Globals.ExitReached) {
-				dt -= Time.deltaTime;
-				if(dt > 0) {
+				announceTime -= dt;
+				if(announceTime > 0) {
 					if(Globals.Player.IsDead) {
 						guiText.text = "... (argh!) ...";
 					}
@@ -58,7 +60,7 @@ public class Announcer : MonoBehaviour {
 						guiText.text = "Time over ...";
 					}
 					if(Input.GetButtonDown("Jump")) {
-						dt = 0.0f;
+						announceTime = 0.0f;
 					}
 				}
 				else {
@@ -78,11 +80,11 @@ public class Announcer : MonoBehaviour {
 					guiText.text = "Yeah!\nYou completed all " + Globals.LevelID.ToString() + " levels!";
 				}
 				else {
-					dt -= Time.deltaTime;
-					if(dt > 0) {
+					announceTime -= dt;
+					if(announceTime > 0) {
 						guiText.text = "Bravo!";
 						if(Input.GetButtonDown("Jump")) {
-							dt = 0.0f;
+							announceTime = 0.0f;
 						}
 					}
 					else {

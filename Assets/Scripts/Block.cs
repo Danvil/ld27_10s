@@ -38,7 +38,7 @@ public class Block : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
-		float h = Mathf.Sin((MyTime.Time / wobbleDuration + phaseOffset) * (2.0f * Mathf.PI));
+		float h = Mathf.Sin((MyTime.GameTime / wobbleDuration + phaseOffset) * (2.0f * Mathf.PI));
 		this.transform.localPosition =
 			basePosition
 			+ offset

@@ -1,13 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Player : MonoBehaviour {
+public class Player : MonoBehaviour
+{
+	const int JUMP_PREPARE = 6;
+	const int JUMP_ACCEL = 3;
 	
-	public float breakLin = 1.0f;
-	public float breakQuad = 1.0f;
-	public float speedMax = 3.0f;
-	public float accelerationMove = 30.0f;
-	public float accelerationJump = 100.0f;
+	public float breakMult = 0.1f;
+	public float speedMin = 0.2f;
+	public float speedMax = 6.0f;
+	public float accelerationMove = 300.0f;
+	public float accelerationJump = 1.9f;
+	public float rotLerpSpeed = 0.4f;
 
 	public bool IsGrounded = false;
 	
@@ -15,20 +19,27 @@ public class Player : MonoBehaviour {
 	
 	CharacterController controller;
 	
+	Animation anim;
+	
 	Vector3 velocity;
 
 	int hasJumped = 0;
 	int hasPaused = 0;
+	string currentAnim = "Idle";
 
 	public bool IsDead { get; private set; }
 
 	void Awake() {
 		Globals.Player = this;
 		controller = GetComponent<CharacterController>();
+		anim = GetComponentInChildren<Animation>();
 		IsDead = false;
 	}
 	
 	void Start () {
+		currentAnim = "Idle";
+		anim.CrossFade(currentAnim);
+		anim["Jump"].speed = 1.8f;
 	}
 	
 	void Update () {
@@ -36,73 +47,93 @@ public class Player : MonoBehaviour {
 		float dtf = MyTime.DeltaTime;
 		// check if player is on ground
 		// IsGrounded = controller.isGrounded; // does not work reliably...
+		Color col;
 		if(IsGrounded) {
-			this.GetComponentInChildren<Renderer>().material.color = Color.blue;
+			col = Color.blue;
 		}
 		else {
-			this.GetComponentInChildren<Renderer>().material.color = Color.green;
+			col = Color.green;
+		}
+		foreach(var r in this.GetComponentsInChildren<Renderer>()) {
+			r.material.color = col;
 		}
 		// move player
 		if(!MyTime.Pause) {
-			bool velocity_changed = false;
 			// jump accelerate
 			if(IsGrounded && hasJumped <= 0 && Input.GetButtonDown("Jump")) {
 				Debug.Log("JUMP");
-				hasJumped = 3;
+				hasJumped = JUMP_PREPARE + JUMP_ACCEL;
 			}
-			if(hasJumped > 0) {
+			if(0 < hasJumped && hasJumped <= JUMP_ACCEL) {
 				velocity += new Vector3(0.0f, accelerationJump, 0.0f);
-				velocity_changed = true;
 			}
-			hasJumped --;
-			if(hasJumped < 0) hasJumped = 0;
-			// move accelerate
-			Vector3 movedir = Vector3.zero;
-			if(velocity.y >= 0.0f) {
-				movedir += new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+			// adjust speed
+			if(IsGrounded) {
+				// break over time
+				velocity.x *= breakMult;
+				velocity.z *= breakMult;
+				// move accelerate
+				Vector3 movedir = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 				float len = movedir.magnitude;
 				if(len > 0.0f) {
 					velocity += accelerationMove * movedir / len * dtf;
-					velocity_changed = true;
+				}
+				// limit velocity
+				float q = Mathf.Sqrt(velocity.x*velocity.x + velocity.z*velocity.z);
+				if(q > speedMax) {
+					velocity.x *= speedMax/q;
+					velocity.z *= speedMax/q;
 				}
 			}
-			// break over time
-			if(IsGrounded && !velocity_changed) {
-				Vector3 v = velocity;
-				v.y = 0.0f;
-				Vector3 breakForce = (breakLin * v + breakQuad * v.magnitude * v) * dtf;
-				if(Mathf.Abs(velocity.x) < Mathf.Abs(breakForce.x)) {
-					velocity.x = 0.0f;
-				}
-				else {
-					velocity.x -= breakForce.x;
-				}
-				if(Mathf.Abs(velocity.z) < Mathf.Abs(breakForce.z)) {
-					velocity.z = 0.0f;
-				}
-				else {
-					velocity.z -= breakForce.z;
-				}
+			// gravity and collision with ground
+			velocity += gravity * dtf;
+			if(IsGrounded && velocity.y < 0.0f) {
+				velocity.y = 0.0f;
 			}
-			// limit velocity
+			// set rotation
 			float speed = Mathf.Sqrt(velocity.x*velocity.x + velocity.z*velocity.z);
-			if(speed > speedMax) {
-				velocity.x *= speedMax/speed;
-				velocity.z *= speedMax/speed;
+			if(speed > speedMin) {
+				float theta = Mathf.Atan2(velocity.z, velocity.x);
+				Quaternion target = Quaternion.AngleAxis(-360.0f/(2.0f*Mathf.PI)*theta, new Vector3(0,1,0));
+				this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, target, rotLerpSpeed);
 			}
-			// gravity
-			if(!IsGrounded) {
-				// Vector3 vold = velocity;
-				velocity += gravity * dtf;
-				// Debug.Log(vold.ToString() + "->" + velocity.ToString());
+			// play animation
+			if(hasJumped > 0) {
+				if(currentAnim != "Jump") {
+					currentAnim = "Jump";
+					anim.CrossFade(currentAnim, 0.1f);
+				}
 			}
 			else {
-				if(velocity.y < 0.0f) {
-					velocity.y = 0.0f;
+				if(!IsGrounded) {
+					if(currentAnim != "Jump") {
+						currentAnim = "Jump";
+						anim.CrossFade(currentAnim, 0.4f);
+					}
+				}
+				else {
+					if(speed > speedMin) {
+						if(currentAnim != "Run") {
+							currentAnim = "Run";
+							anim.CrossFade(currentAnim, 0.3f);
+						}
+						anim["Run"].speed = 0.25f*speed;
+					}
+					else {
+						if(currentAnim != "Idle") {
+							currentAnim = "Idle";
+							anim.CrossFade(currentAnim, 0.1f);
+						}
+					}
 				}
 			}
-			// move controller
-			controller.Move(velocity * dtf);
+			if(hasJumped <= JUMP_ACCEL) {
+				// move controller
+				controller.Move(velocity * dtf);
+			}
+			// jump stuff
+			hasJumped --;
+			if(hasJumped < 0) hasJumped = 0;
 		}
 		// check fall to death
 		if(this.transform.position.y <= -3.0f) {
