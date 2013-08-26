@@ -25,4 +25,6 @@ public static class Globals
 
 	public static bool HasStarted = false;
 	public static bool HasEnded = false;
+	public static bool IsFailed = false;
+	public static bool IsExploded = false;
 }

@@ -19,10 +19,15 @@ public class Announcer : MonoBehaviour {
 		Globals.HasStarted = false;
 		Globals.HasEnded = false;
 		Globals.ExitReached = false;
+		Globals.IsExploded = false;
+		Globals.IsFailed = false;
 		Application.LoadLevel(lvl); 
 	}
 	
 	void Update () {
+		if(Globals.HasEnded) {
+			Globals.IsExploded = false;
+		}
 		MyTime.UpdateRealDeltaTime();
 		float dt = MyTime.RealDeltaTime;
 		if(!Globals.HasStarted) {
@@ -44,21 +49,15 @@ public class Announcer : MonoBehaviour {
 			if(!MyTime.Pause) {
 				MyTime.GameTime += dt;
 			}
-			if(Globals.Player.IsDead) {
+			if(Globals.Player.IsDead || Globals.Clock.TimeOut || Globals.ExitReached) {
+				Globals.IsFailed = Globals.Player.IsDead || Globals.Clock.TimeOut;
 				Globals.HasEnded = true;
-				announceTime = Globals.BRAVO_TIME;
-			}
-			if(Globals.Clock.TimeOut) {
-				Globals.HasEnded = true;
-				announceTime = Globals.BRAVO_TIME;
-			}
-			if(Globals.ExitReached) {
-				Globals.HasEnded = true;
+				Globals.IsExploded = true;
 				announceTime = Globals.BRAVO_TIME;
 			}
 		}
 		if(Globals.HasEnded) {
-			MyTime.Pause = true;
+			//MyTime.Pause = true;
 			if(!Globals.ExitReached) {
 				announceTime -= dt;
 				if(announceTime > 0) {

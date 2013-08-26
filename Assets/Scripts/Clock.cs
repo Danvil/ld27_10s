@@ -24,7 +24,7 @@ public class Clock : MonoBehaviour {
 	}
 	
 	void Update () {
-		if(!MyTime.Pause) {
+		if(!MyTime.Pause && !Globals.HasEnded) {
 			timeGone -= MyTime.DeltaTime;
 			timeGone = Mathf.Max(0.0f, timeGone);
 			guiText.material.color = findColor();

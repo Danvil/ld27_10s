@@ -144,16 +144,16 @@ public class Player : MonoBehaviour
 			// DIE
 			IsDead = true;
 		}
-		// go to pause mode
-		if(Globals.HasStarted) {
-			if(hasPaused <= 0 && Input.GetButtonDown("Fire1")) {
-				MyTime.Pause = !MyTime.Pause;
-				hasPaused = 3;
-			}
-			else {
-				hasPaused --;
-				if(hasPaused < 0) hasPaused = 0;
-			}
-		}
+		// // go to pause mode
+		// if(Globals.HasStarted) {
+		// 	if(hasPaused <= 0 && Input.GetButtonDown("Fire1")) {
+		// 		MyTime.Pause = !MyTime.Pause;
+		// 		hasPaused = 3;
+		// 	}
+		// 	else {
+		// 		hasPaused --;
+		// 		if(hasPaused < 0) hasPaused = 0;
+		// 	}
+		// }
 	}
 }
